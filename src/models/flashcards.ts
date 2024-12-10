@@ -1,5 +1,5 @@
 export interface Flashcard {
-  id: number;
+  id: `${string}-${string}-${string}-${string}-${string}`;
   front: string;
   back: string;
 }

@@ -2,20 +2,6 @@ export const isTranslatorApiSupported = () => {
   return "translation" in self && "createTranslator" in self.translation;
 };
 
-export async function isLanguagePairSupported(source: string, target: string) {
-  if (!isTranslatorApiSupported()) {
-    return false;
-  }
-
-  const capabilities = await self.ai?.translator?.capabilities();
-
-  if (!capabilities) {
-    return false;
-  }
-
-  return capabilities.languagePairAvailable(source, target);
-}
-
 export async function createTranslator({
   sourceLanguage,
   targetLanguage,

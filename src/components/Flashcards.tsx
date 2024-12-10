@@ -12,6 +12,7 @@ import { Label } from "./ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Flashcard } from "@/models/flashcards.ts";
 import { generateAiFlashcards } from "@/services/flashcards.service.ts";
+import { Loader2, SparklesIcon } from "lucide-react";
 
 export function Flashcards() {
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
@@ -19,62 +20,83 @@ export function Flashcards() {
   const [back, setBack] = useState("");
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
-  const [isFlipping, setIsFlipping] = useState(false);
+  const [animation, setAnimation] = useState<
+    "flip" | "swipe-left" | "swipe-right" | null
+  >(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("create");
 
   const addFlashcard = () => {
     if (front.trim() && back.trim()) {
-      setFlashcards([...flashcards, { id: Date.now(), front, back }]);
+      setFlashcards([...flashcards, { id: crypto.randomUUID(), front, back }]);
       setFront("");
       setBack("");
     }
   };
 
   const nextCard = () => {
-    setIsFlipping(true);
+    setAnimation("swipe-left");
     setIsFlipped(false);
     setTimeout(() => {
       setCurrentCardIndex((prevIndex) => (prevIndex + 1) % flashcards.length);
-    }, 150); // Half of the transition time
+    }, 150);
   };
 
   const prevCard = () => {
-    setIsFlipping(true);
+    setAnimation("swipe-right");
     setIsFlipped(false);
     setTimeout(() => {
       setCurrentCardIndex(
         (prevIndex) => (prevIndex - 1 + flashcards.length) % flashcards.length,
       );
-    }, 150); // Half of the transition time
+    }, 150);
   };
 
   const flipCard = () => {
+    setAnimation("flip");
     setIsFlipped(!isFlipped);
   };
 
   useEffect(() => {
-    if (isFlipping) {
+    if (animation) {
       const timer = setTimeout(() => {
-        setIsFlipping(false);
-      }, 300); // Full transition time
+        setAnimation(null);
+      }, 300);
       return () => clearTimeout(timer);
     }
-  }, [isFlipping]);
+  }, [animation]);
 
   const generateFlashcards = () => {
-    generateAiFlashcards().then((flashcards) => {
-      console.log("xx", flashcards);
-    });
+    setIsLoading(true);
+    generateAiFlashcards()
+      .then((flashcards) => {
+        setFlashcards(flashcards);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setActiveTab("study");
+      });
   };
 
   return (
-    <Card className="w-full max-w-3xl mx-auto">
+    <Card className="w-full min-h-[480px] max-w-3xl mx-auto flex flex-col">
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-center">
           Flashcards
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="create">
+      <CardContent className="flex-1 h-full flex flex-col relative">
+        {isLoading && (
+          <div className="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </div>
+        )}
+        <Tabs
+          defaultValue="create"
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="h-full flex flex-col flex-1"
+        >
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="create">Create</TabsTrigger>
             <TabsTrigger value="study">Study</TabsTrigger>
@@ -99,23 +121,35 @@ export function Flashcards() {
                   placeholder="Enter the answer"
                 />
               </div>
-              <div>
-                <Button onClick={addFlashcard} className="w-full">
+              <div className="flex items-center gap-3">
+                <Button
+                  variant="outline"
+                  disabled={!front.trim() || !back.trim()}
+                  onClick={addFlashcard}
+                  className="w-full"
+                >
                   Add Flashcard
                 </Button>
-                <Button onClick={generateFlashcards}>
+
+                <Button onClick={generateFlashcards} className="w-full">
+                  <SparklesIcon className="h-5 w-5 mr-1" />
                   Generate Flashcards with AI
                 </Button>
               </div>
             </div>
           </TabsContent>
-          <TabsContent value="study">
+          <TabsContent
+            value="study"
+            className="flex flex-col items-center h-full justify-center flex-1"
+          >
             {flashcards.length > 0 ? (
-              <div className="space-y-4">
+              <div className="space-y-4 flex flex-col w-full">
                 <div
                   className={`
                     h-48 w-full perspective-1000 cursor-pointer
-                    ${isFlipping ? "animate-flip" : ""}
+                    ${animation === "flip" ? "animate-flip" : ""}
+                    ${animation === "swipe-left" ? "animate-swipe-left" : ""}
+                    ${animation === "swipe-right" ? "animate-swipe-right" : ""}
                   `}
                   onClick={flipCard}
                 >
@@ -151,9 +185,16 @@ export function Flashcards() {
                 </div>
               </div>
             ) : (
-              <p className="text-center">
-                No flashcards available. Create some first!
-              </p>
+              <div className="flex flex-col gap-3">
+                <p className="text-center text-gray-500 text-sm">
+                  No flashcards available. Create some first!
+                </p>
+
+                <Button onClick={generateFlashcards} className="w-full">
+                  <SparklesIcon className="h-5 w-5 mr-1" />
+                  Generate Flashcards with AI
+                </Button>
+              </div>
             )}
           </TabsContent>
         </Tabs>

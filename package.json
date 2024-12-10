@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@huggingface/transformers": "^3.1.2",
+    "@radix-ui/react-accordion": "^1.2.1",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.0",
@@ -22,6 +23,7 @@
     "pinyin-pro": "^3.26.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-router-dom": "^7.0.2",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "wavefile": "^11.0.0"
