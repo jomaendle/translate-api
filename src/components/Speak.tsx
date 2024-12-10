@@ -11,6 +11,7 @@ export function Speak({ translatedText, targetLang }: SpeakProps) {
     if ("speechSynthesis" in window) {
       const utterance = new SpeechSynthesisUtterance(translatedText);
       utterance.lang = targetLang;
+      utterance.rate = 0.8;
       speechSynthesis.speak(utterance);
     } else {
       alert("Text-to-speech is not supported in your browser.");

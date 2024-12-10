@@ -7,7 +7,26 @@ declare global {
         capabilities: () => Promise<void>;
       };
       translator: {
-        capabilities: () => Promise<void>;
+        capabilities: () => Promise<{
+          languagePairAvailable: (source: string, target: string) => boolean;
+        }>;
+      };
+      languageModel: {
+        create: ({
+          initialPrompts,
+          systemPrompt,
+        }: {
+          initialPrompts: {
+            role: string;
+            content: string;
+          }[];
+          systemPrompt?: string;
+        }) => {
+          prompt: (text: string) => Promise<string>;
+          clone: () => Promise<
+            ReturnType<typeof window.ai.languageModel.create>
+          >;
+        };
       };
     };
     translation: {
@@ -26,6 +45,7 @@ declare global {
           callback: (event: ProgressEvent) => void,
         ) => void;
       };
+      capabilities: () => Promise<void>;
       createTranslator: (options: {
         sourceLanguage: string;
         targetLanguage: string;
