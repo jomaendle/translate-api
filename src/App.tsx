@@ -13,7 +13,7 @@ function App() {
 
       <Header />
 
-      <main className="container mx-auto flex justify-center p-4">
+      <main className="container mx-auto flex justify-center p-4 sm:px-0">
         <div className="flex items-center justify-center w-full">
           <Routes>
             <Route path="/" element={<Translator />} />

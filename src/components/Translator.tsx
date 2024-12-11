@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowRightLeft, LanguagesIcon, Loader2 } from "lucide-react";
+import { ArrowRightLeft, LanguagesIcon, Loader2, XIcon } from "lucide-react";
 import { html } from "pinyin-pro";
 import { Listen } from "@/components/Listen.tsx";
 import { Speak } from "@/components/Speak.tsx";
@@ -34,7 +34,7 @@ export function Translator() {
   const [isLoading, setIsLoading] = useState(false);
   const [translator, setTranslator] = useState<TranslatorType | null>(null);
 
-  const handleTranslate = useCallback(
+  const translateText = useCallback(
     async ({
       text,
       translatorInput,
@@ -73,7 +73,7 @@ export function Translator() {
       targetLanguage: targetLang,
     }).then(async (translator) => {
       setTranslator(translator);
-      await handleTranslate({ translatorInput: translator });
+      await translateText({ translatorInput: translator });
     });
   }, [sourceLang, targetLang]);
 
@@ -144,18 +144,35 @@ export function Translator() {
         </div>
         <div>
           <Label htmlFor="sourceText">Enter text</Label>
-          <Textarea
-            id="sourceText"
-            placeholder="Type your text here..."
-            value={sourceText}
-            onChange={(e) => setSourceText(e.target.value)}
-            className="min-h-[100px]"
-            onKeyDown={async (e) => {
-              if (e.key === "Enter" && e.metaKey) {
-                await handleTranslate({ text: sourceText });
-              }
-            }}
-          />
+          <div className="relative">
+            {sourceText?.length > 0 && (
+              <div className="absolute right-2 bottom-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => {
+                    setSourceText("");
+                    setTranslatedText("");
+                  }}
+                >
+                  <XIcon className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
+
+            <Textarea
+              id="sourceText"
+              placeholder="Type your text here..."
+              value={sourceText}
+              onChange={(e) => setSourceText(e.target.value)}
+              className="min-h-[100px]"
+              onKeyDown={async (e) => {
+                if (e.key === "Enter" && e.metaKey) {
+                  await translateText({ text: sourceText });
+                }
+              }}
+            />
+          </div>
         </div>
         <div className="relative">
           <Label htmlFor="translatedText">Translation</Label>
@@ -174,10 +191,10 @@ export function Translator() {
           )}
         </div>
       </CardContent>
-      <CardFooter className="gap-3">
+      <CardFooter className="gap-3 flex-col sm:flex-row">
         <Button
           className="w-full"
-          onClick={() => handleTranslate({ text: sourceText })}
+          onClick={() => translateText({ text: sourceText })}
           disabled={isLoading || !sourceText.trim()}
         >
           {isLoading ? (
@@ -193,15 +210,15 @@ export function Translator() {
           )}
         </Button>
 
-        <Speak translatedText={translatedText} targetLang={targetLang} />
+        <div className="grid grid-cols-2 gap-3 w-full sm:contents">
+          <Speak translatedText={translatedText} targetLang={targetLang} />
 
-        <Listen
-          setSourceText={setSourceText}
-          language={sourceLang}
-          onListen={async (res) => {
-            await handleTranslate({ text: res });
-          }}
-        />
+          <Listen
+            setSourceText={setSourceText}
+            language={sourceLang}
+            onListen={(text) => translateText({ text })}
+          />
+        </div>
       </CardFooter>
     </Card>
   );

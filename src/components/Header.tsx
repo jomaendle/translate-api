@@ -12,7 +12,7 @@ export function Header() {
   }, [activeTab]);
 
   return (
-    <header className="w-full max-w-3xl mx-auto my-6">
+    <header className="w-full max-w-3xl mx-auto my-6 px-4 sm:px-0">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-3 min-h-12">
           <TabsTrigger value="/" className="min-h-10">
