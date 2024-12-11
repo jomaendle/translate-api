@@ -35,7 +35,7 @@ export function HelpFAQ() {
                   website.
                 </li>
                 <li>
-                  Ensure you're using Chrome Canary version 127 or greater.
+                  Ensure you're using Chrome Canary version 131 or greater.
                 </li>
               </ol>
             </AccordionContent>
@@ -48,6 +48,7 @@ export function HelpFAQ() {
               <p>You need to enable the following flags in Chrome Canary:</p>
               <ol className="list-decimal list-inside space-y-2 mt-2">
                 <li>Open chrome://flags in Chrome Canary</li>
+                <li>Enable "#translation-api"</li>
                 <li>Enable "#prompt-api-for-gemini-nano"</li>
                 <li>
                   Enable "#optimization-guide-on-device-model" and set it to
