@@ -1,5 +1,3 @@
-import styles from "./TranslationApiNotEnabled.module.css";
-import { cn } from "@/lib/utils.ts";
 import { TriangleAlert } from "lucide-react";
 import { isTranslatorApiSupported } from "@/services/translation.service.ts";
 
@@ -8,12 +6,7 @@ export const TranslationApiNotEnabled = () => {
 
   return (
     isNotSupported && (
-      <div
-        className={cn(
-          styles.infoArea,
-          "p-4 bg-yellow-100 m-4 rounded-xl flex items-center gap-3",
-        )}
-      >
+      <div className="p-4 bg-yellow-100 m-4 rounded-xl flex items-center gap-3">
         <TriangleAlert className="size-7 text-yellow-800" />
         <div>
           <p className="text-lg font-semibold">Translation API not enabled</p>

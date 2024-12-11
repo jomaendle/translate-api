@@ -1,9 +1,6 @@
-import styles from "./GithubLink.module.css";
-import { cn } from "@/lib/utils.ts";
-
 export const GitHubLink = () => {
   return (
-    <div className={cn(styles.footer, "p-4 flex justify-center")}>
+    <div className="p-4 flex justify-center">
       <a
         href="https://github.com/jomaendle/translate-api"
         target="_blank"

@@ -1,11 +1,10 @@
 import "./App.css";
 import { Translator } from "@/components/Translator.tsx";
-import { GitHubLink } from "@/components/GitHubLink/GitHubLink.tsx";
-import { TranslationApiNotEnabled } from "@/components/TranslationApiNotEnabled/TranslationApiNotEnabled.tsx";
+import { GitHubLink } from "@/components/GitHubLink.tsx";
+import { TranslationApiNotEnabled } from "@/components/TranslationApiNotEnabled.tsx";
 import { HelpFAQ } from "@/components/HelpFAQ.tsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Header } from "@/components/Header.tsx";
-import { Flashcards } from "@/components/Flashcards.tsx";
 
 function App() {
   return (
@@ -18,7 +17,7 @@ function App() {
         <div className="flex items-center justify-center w-full">
           <Routes>
             <Route path="/" element={<Translator />} />
-            <Route path="flashcards" element={<Flashcards />} />
+            {/*<Route path="flashcards" element={<Flashcards />} />*/}
             <Route path="help" element={<HelpFAQ />} />
           </Routes>
         </div>

@@ -35,9 +35,10 @@ export function Listen({ setSourceText, language, onListen }: ListenProps) {
     }
 
     console.log("Listening...", recognition);
+
     setIsListening(true);
     recognition.start();
-    recognition.onresult = (event) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       const speechToText = event.results[0][0].transcript;
       setSourceText(speechToText);
       setIsListening(false);

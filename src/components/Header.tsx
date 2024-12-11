@@ -18,7 +18,7 @@ export function Header() {
           <TabsTrigger value="/" className="min-h-10">
             Translator
           </TabsTrigger>
-          <TabsTrigger value="flashcards" className="min-h-10">
+          <TabsTrigger value="flashcards" disabled={true} className="min-h-10">
             Flashcards
           </TabsTrigger>
           <TabsTrigger value="help" className="min-h-10">
