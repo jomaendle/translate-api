@@ -16,7 +16,7 @@ declare global {
           initialPrompts,
           systemPrompt,
         }: {
-          initialPrompts: {
+          initialPrompts?: {
             role: string;
             content: string;
           }[];

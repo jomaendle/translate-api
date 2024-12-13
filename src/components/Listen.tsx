@@ -9,9 +9,17 @@ interface ListenProps {
   setSourceText: (text: string) => void;
   language: string;
   onListen: (result: string) => void;
+  onLoading?: (isLoading: boolean) => void;
+  cancelListen?: () => void;
 }
 
-export function Listen({ setSourceText, language, onListen }: ListenProps) {
+export function Listen({
+  setSourceText,
+  language,
+  onListen,
+  onLoading,
+  cancelListen,
+}: ListenProps) {
   const [recognition, setRecognition] = useState<SpeechRecognition>();
   const [isListening, setIsListening] = useState(false);
 
@@ -27,6 +35,18 @@ export function Listen({ setSourceText, language, onListen }: ListenProps) {
       return recognition;
     });
   }, [language]);
+
+  useEffect(() => {
+    onLoading?.(isListening);
+  }, [isListening, onLoading]);
+
+  useEffect(() => {
+    if (cancelListen) {
+      console.log("Canceling listening...");
+      recognition?.abort();
+      setIsListening(false);
+    }
+  }, [cancelListen, recognition]);
 
   const handleListen = () => {
     if (!recognition) {

@@ -87,6 +87,17 @@ export function HelpFAQ() {
               </ul>
             </AccordionContent>
           </AccordionItem>
+          <AccordionItem value="item-6">
+            <AccordionTrigger>
+              Where is my data (translations, history, flashcards) stored?
+            </AccordionTrigger>
+            <AccordionContent>
+              <p>
+                All data is stored locally in your browser. No data is sent to
+                any external servers or services.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
         </Accordion>
       </CardContent>
     </Card>

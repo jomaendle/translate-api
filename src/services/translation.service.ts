@@ -1,3 +1,15 @@
+import { atomWithStorage } from "jotai/utils";
+import { SupportedLanguage } from "@/models/languages.ts";
+
+export const sourceLanguageAtom = atomWithStorage<SupportedLanguage>(
+  "sourceLanguage",
+  "en",
+);
+export const targetLanguageAtom = atomWithStorage<SupportedLanguage>(
+  "targetLanguage",
+  "es",
+);
+
 export const isTranslatorApiSupported = () => {
   return "translation" in self && "createTranslator" in self.translation;
 };

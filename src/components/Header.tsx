@@ -9,7 +9,7 @@ export function Header() {
 
   useEffect(() => {
     navigate(activeTab);
-  }, [activeTab]);
+  }, [activeTab, navigate]);
 
   return (
     <header className="w-full max-w-3xl mx-auto my-6 px-4 sm:px-0">
@@ -18,7 +18,7 @@ export function Header() {
           <TabsTrigger value="/" className="min-h-10">
             Translator
           </TabsTrigger>
-          <TabsTrigger value="flashcards" disabled={true} className="min-h-10">
+          <TabsTrigger value="flashcards" className="min-h-10">
             Flashcards
           </TabsTrigger>
           <TabsTrigger value="help" className="min-h-10">
